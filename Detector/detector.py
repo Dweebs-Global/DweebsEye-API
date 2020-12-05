@@ -6,8 +6,6 @@ from playsound import playsound
 import numpy
 import requests
 
-# check internet connection, access to camera, microphone?
-
 
 def listen():
     """getting user's input with the microphone"""
@@ -82,15 +80,13 @@ def search(photo):
 
 def main():
     """
-    This Object Detector gets user's voice input (code word)
+    This Object Detector gets user's voice input (code word "object")
     and takes a photo with the device's default camera,
     sends the photo to Google reverse image search
     and returns audio output stating which object is in front of the user.
     """
     speech = listen()   # do we need other languages?
-    # word "sense" is not easily recognised; added similar words
-    # other options: "object","photo","detect"; (I find "OBJECT" the best option)
-    if speech in ["sense", "since", "send", "sent", "sends", "object", "detect", "photo"]:
+    if speech == "object":
         photo = capture_img()
         save_img(photo)
         search("capture.png")
