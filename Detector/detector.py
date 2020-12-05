@@ -67,9 +67,11 @@ def search(photo):
     try:
         # post request with a binary image file
         response = requests.post(url=url, files=file, allow_redirects=False)
+        response.raise_for_status()  # raise Exception if request is unsuccessful
         # get the search results page
         photo_url = response.headers["Location"]
         response1 = requests.get(photo_url, headers=headers)
+        response1.raise_for_status()  # raise Exception if request is unsuccessful
         all_results = BeautifulSoup(response1.text, "html.parser")
         # fetch the result word(s) from the search line (next to image)
         result = all_results.find("input", {"class": "gLFyf gsfi"})["value"]
