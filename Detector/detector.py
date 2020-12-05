@@ -88,8 +88,9 @@ def main():
     speech = listen()   # do we need other languages?
     if speech == "object":
         photo = capture_img()
-        save_img(photo)
-        search("capture.png")
+        if photo is not None:
+            save_img(photo)
+            search("capture.png")
 
 
 if __name__ == '__main__':
