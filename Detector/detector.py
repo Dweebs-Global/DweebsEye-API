@@ -1,3 +1,4 @@
+import os
 from bs4 import BeautifulSoup
 import cv2
 import speech_recognition as sr
@@ -17,7 +18,7 @@ def listen():
     with mic as source:
         # audio is analyzed for ambient noises,talk after half second
         recognize.adjust_for_ambient_noise(source, duration=0.5)
-        audio = recognize.listen(source, phrase_time_limit=2)
+        audio = recognize.listen(source, phrase_time_limit=3)
         try:
             user_input = recognize.recognize_google(audio)
         except sr.RequestError:
@@ -25,16 +26,16 @@ def listen():
             speaker("I could not connect to Internet to convert your speech to text.")
         except sr.UnknownValueError:
             user_input = None
-            speaker("I could not understand what you said.")
-
+            speaker("I could not understand what you said. Let's try again?")
         return user_input
 
 
 def speaker(text):
     """returning results with the speaker"""
     try:
-        gTTS(text=text).save("speaker.mp3")
-        playsound("speaker.mp3")
+        gTTS(text=text, lang="en").save(f"{text.split()[0]}.mp3")
+        playsound(f"{text.split()[0]}.mp3")
+        os.remove(f"{text.split()[0]}.mp3")
     except Exception:
         print("Could not activate the speaker")
 
@@ -53,27 +54,30 @@ def capture_img():
 def save_img(frame):
     """saving the image in the file 'capture.png'"""
     frame.dtype = numpy.uint8
-    cv2.imwrite('capture.png', frame)
+    cv2.imwrite("capture.png", frame)
 
 
 def search(photo):
     """performing Google reverse image search and returning the name of the captured object"""
-    url = "https://images.google.com/searchbyimage/upload"
-    file = {'encoded_image': (photo, open(photo, 'rb'))}
-    headers = {'User-agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 '
-                             'Safari/537.17'}
+    url = "https://www.google.com/searchbyimage/upload"
+    file = {'encoded_image': (photo, open(photo, 'rb'), "multipart/form-data")}
+    headers = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/87.0.4280.88 Safari/537.36'}
     try:
         # post request with a binary image file
         response = requests.post(url=url, files=file, allow_redirects=False)
         response.raise_for_status()  # raise Exception if request is unsuccessful
         # get the search results page
         photo_url = response.headers["Location"]
-        response1 = requests.get(photo_url, headers=headers)
+        response1 = requests.get(photo_url, headers=headers, params={"hl": "EN"})
         response1.raise_for_status()  # raise Exception if request is unsuccessful
         all_results = BeautifulSoup(response1.text, "html.parser")
         # fetch the result word(s) from the search line (next to image)
-        result = all_results.find("input", {"class": "gLFyf gsfi"})["value"]
-        speaker(f"There is probably {result} in front of you.")
+        result = all_results.find("a", {"class": "fKDtNb"}).text
+        if result:
+            speaker(f"There is probably {result} in front of you.")
+        else:
+            speaker("I could not find anything.")
     except Exception:
         speaker("I could not perform an image search.")
 
@@ -86,8 +90,11 @@ def main():
     and returns audio output stating which object is in front of the user.
     """
     speech = listen()   # do we need other languages?
+    while speech != "object":
+        speech = listen()
     if speech == "object":
         photo = capture_img()
+        # making sure it's a new photo, not previous one
         if photo is not None:
             save_img(photo)
             search("capture.png")
