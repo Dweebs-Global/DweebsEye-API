@@ -27,6 +27,9 @@ def listen():
         except sr.UnknownValueError:
             user_input = None
             speaker("I could not understand what you said. Let's try again?")
+        except Exception:
+            user_input = None
+            speaker("I could not activate speech recognizer.")
         return user_input
 
 
@@ -90,14 +93,12 @@ def main():
     and returns audio output stating which object is in front of the user.
     """
     speech = listen()   # do we need other languages?
-    while speech != "object":
+    while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
         speech = listen()
-    if speech == "object":
-        photo = capture_img()
-        # making sure it's a new photo, not previous one
-        if photo is not None:
-            save_img(photo)
-            search("capture.png")
+    photo = capture_img()
+    if photo is not None:   # making sure it's a new photo, not previous one:
+        save_img(photo)
+        search("capture.png")
 
 
 if __name__ == '__main__':
