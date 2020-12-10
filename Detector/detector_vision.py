@@ -6,7 +6,7 @@ import numpy
 from playsound import playsound
 import speech_recognition as sr
 
-# set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Elena\OneDrive\Документы\programming\volunteering\DweebsGlobal\detector_vision.json
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../detector_vision.json"
 
 
 def listen():
@@ -62,18 +62,34 @@ def save_img(frame):
 
 
 def google_vision(photo):
-    client = vision.ImageAnnotatorClient()
-    with open(photo, 'rb') as image_file:
-        content = image_file.read()
-    image = vision.Image(content=content)
-    objects = client.object_localization(
-        image=image).localized_object_annotations
-    print('Number of objects found: {}'.format(len(objects)))
-    for object_ in objects:
-        print(f'\n{object_.name}')
+    """detecting objects on the photo with Google Vision API"""
+    try:
+        client = vision.ImageAnnotatorClient()
+        with open(photo, 'rb') as image_file:
+            content = image_file.read()
+        image = vision.Image(content=content)
+        objects = client.object_localization(image=image).localized_object_annotations
+        result = ''
+        if objects:
+            for num, object_ in enumerate(objects):
+                if len(objects) > 1 and num == len(objects) - 2:
+                    result += object_.name + ' and '
+                else:
+                    result += object_.name+', '
+            speaker(f"There is probably {result} in front of you")
+        else:
+            speaker("I could not find anything.")
+    except Exception:
+        speaker("I could not perform an image search.")
 
 
 def main():
+    """
+    This Object Detector gets user's voice input (code word "object")
+    and takes a photo with the device's default camera,
+    then detects objects on it with Google Vision API
+    and returns audio output stating which object is in front of the user.
+    """
     speech = listen()
     while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
         speech = listen()
