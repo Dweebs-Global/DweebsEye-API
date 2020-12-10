@@ -1,11 +1,12 @@
 import os
-from bs4 import BeautifulSoup
 import cv2
+from google.cloud import vision
 from gtts import gTTS
 import numpy
 from playsound import playsound
-import requests
 import speech_recognition as sr
+
+# set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Elena\OneDrive\Документы\programming\volunteering\DweebsGlobal\detector_vision.json
 
 
 def listen():
@@ -60,45 +61,26 @@ def save_img(frame):
     cv2.imwrite("capture.png", frame)
 
 
-def search(photo):
-    """performing Google reverse image search and returning the name of the captured object"""
-    url = "https://www.google.com/searchbyimage/upload"
-    file = {'encoded_image': (photo, open(photo, 'rb'), "multipart/form-data")}
-    headers = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                             'Chrome/87.0.4280.88 Safari/537.36'}
-    try:
-        # post request with a binary image file
-        response = requests.post(url=url, files=file, allow_redirects=False)
-        response.raise_for_status()  # raise Exception if request is unsuccessful
-        # get the search results page
-        photo_url = response.headers["Location"]
-        response1 = requests.get(photo_url, headers=headers, params={"hl": "EN"})
-        response1.raise_for_status()  # raise Exception if request is unsuccessful
-        all_results = BeautifulSoup(response1.text, "html.parser")
-        # fetch the result word(s) from the search line (next to image)
-        result = all_results.find("a", {"class": "fKDtNb"}).text
-        if result:
-            speaker(f"There is probably {result} in front of you.")
-        else:
-            speaker("I could not find anything.")
-    except Exception:
-        speaker("I could not perform an image search.")
+def google_vision(photo):
+    client = vision.ImageAnnotatorClient()
+    with open(photo, 'rb') as image_file:
+        content = image_file.read()
+    image = vision.Image(content=content)
+    objects = client.object_localization(
+        image=image).localized_object_annotations
+    print('Number of objects found: {}'.format(len(objects)))
+    for object_ in objects:
+        print(f'\n{object_.name}')
 
 
 def main():
-    """
-    This Object Detector gets user's voice input (code word "object")
-    and takes a photo with the device's default camera,
-    sends the photo to Google reverse image search
-    and returns audio output stating which object is in front of the user.
-    """
-    speech = listen()   # do we need other languages?
+    speech = listen()
     while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
         speech = listen()
     photo = capture_img()
-    if photo is not None:   # making sure it's a new photo, not previous one:
+    if photo is not None:
         save_img(photo)
-        search("capture.png")
+        google_vision("capture.png")
 
 
 if __name__ == '__main__':
