@@ -69,13 +69,15 @@ def google_vision(photo):
             content = image_file.read()
         image = vision.Image(content=content)
         objects = client.object_localization(image=image).localized_object_annotations
+        print(objects)
         result = ''
         if objects:
             for num, object_ in enumerate(objects):
-                if len(objects) > 1 and num == len(objects) - 2:
-                    result += object_.name + ' and '
-                else:
-                    result += object_.name+', '
+                if object_.name in ['Glasses', 'Top', 'Outerwear', 'Pants', 'Clothing']:
+                    # BUT what if it is necessary to detect (in the shop etc.)?
+                    continue
+                result += object_.name+' and '
+            result = result[:-5]
             speaker(f"There is probably {result} in front of you")
         else:
             speaker("I could not find anything.")
@@ -90,9 +92,9 @@ def main():
     then detects objects on it with Google Vision API
     and returns audio output stating which object is in front of the user.
     """
-    speech = listen()
-    while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
-        speech = listen()
+    # speech = listen()
+    # while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
+    #     speech = listen()
     photo = capture_img()
     if photo is not None:
         save_img(photo)
