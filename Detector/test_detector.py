@@ -1,11 +1,14 @@
 import os
-from bs4 import BeautifulSoup
+
 import cv2
 from gtts import gTTS
 import numpy
 from playsound import playsound
-import requests
 import speech_recognition as sr
+
+from detector_azure_vision import azure_vision
+from detector_google_vision import google_vision
+from detector_reverse_search import image_search
 
 
 def listen():
@@ -60,45 +63,24 @@ def save_img(frame):
     cv2.imwrite("capture.png", frame)
 
 
-def search(photo):
-    """performing Google reverse image search and returning the name of the captured object"""
-    url = "https://www.google.com/searchbyimage/upload"
-    file = {'encoded_image': (photo, open(photo, 'rb'), "multipart/form-data")}
-    headers = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                             'Chrome/87.0.4280.88 Safari/537.36'}
-    try:
-        # post request with a binary image file
-        response = requests.post(url=url, files=file, allow_redirects=False)
-        response.raise_for_status()  # raise Exception if request is unsuccessful
-        # get the search results page
-        photo_url = response.headers["Location"]
-        response1 = requests.get(photo_url, headers=headers, params={"hl": "EN"})
-        response1.raise_for_status()  # raise Exception if request is unsuccessful
-        all_results = BeautifulSoup(response1.text, "html.parser")
-        # fetch the result word(s) from the search line (next to image)
-        result = all_results.find("a", {"class": "fKDtNb"}).text
-        if result:
-            speaker(f"There is probably {result} in front of you.")
-        else:
-            speaker("I could not find anything.")
-    except Exception:
-        speaker("I could not perform an image search.")
-
-
 def main():
     """
     This Object Detector gets user's voice input (code word "object")
     and takes a photo with the device's default camera,
-    sends the photo to Google reverse image search
+    then detects objects on it with one of the three detection functions
+    (using Google Reverse Image Search, Google Vision API or Azure Computer Vision API -
+    you should specify it in the last line of this function)
     and returns audio output stating which object is in front of the user.
     """
-    speech = listen()   # do we need other languages?
+    speech = listen()
     while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
         speech = listen()
     photo = capture_img()
-    if photo is not None:   # making sure it's a new photo, not previous one:
+    if photo is not None:
         save_img(photo)
-        search("capture.png")
+        with open('capture.png', 'rb') as file:  # get bytes representation of the image
+            photo = file.read()
+        print(image_search(photo))
 
 
 if __name__ == '__main__':
