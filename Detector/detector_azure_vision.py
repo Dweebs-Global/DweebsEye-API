@@ -27,9 +27,8 @@ def azure_vision(photo: bytes) -> str:
         result = 'There is probably ' + description + ' in front of you.'
         return json.dumps({'result': result})   # send results in JSON
     except:
-        result = 'I could not perform an image analysis.'
-        return json.dumps({'error': result})
+        return json.dumps({'result':  'I could not perform an image analysis.'})
 
 
-# to test the function uncomment the line below and change 'capture.png' to some image path
+# to test the function uncomment the line below and change 'capture.png' to some image path OR run test_detector.py
 # print(detect(open('capture.png', 'rb').read()))
