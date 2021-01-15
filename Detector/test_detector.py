@@ -1,3 +1,4 @@
+import json
 import os
 
 import cv2
@@ -6,7 +7,7 @@ import numpy
 from playsound import playsound
 import speech_recognition as sr
 
-from detector_azure_vision import azure_vision
+from detector_azure_vision import azure_vision, detect
 from detector_google_vision import google_vision
 from detector_reverse_search import image_search
 
@@ -72,15 +73,15 @@ def main():
     you should specify it in the last line of this function)
     and returns audio output stating which object is in front of the user.
     """
-    speech = listen()
-    while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
-        speech = listen()
+    # speech = listen()
+    # while speech not in ["object", "origin", "audit", "Orchard", "dodgy", "aubergine", "rbg"]:
+    #     speech = listen()
     photo = capture_img()
     if photo is not None:
         save_img(photo)
         with open('capture.png', 'rb') as file:  # get bytes representation of the image
             photo = file.read()
-        print(image_search(photo))
+        speaker(detect(photo))
 
 
 if __name__ == '__main__':
