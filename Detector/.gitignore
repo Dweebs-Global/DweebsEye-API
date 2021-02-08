@@ -1,6 +1,7 @@
 .idea/
 __pycache__/
+images/
 *.png
 *.mp3
-detector_vision.json
+*.json
 .env

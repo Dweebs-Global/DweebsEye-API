@@ -1,32 +1,33 @@
 import json
 import os
 
+from dotenv import load_dotenv
 
-# azure credentials will be sent from mobile app
-# in the request body together with photo
-# Add brands recognition? Faces (gender,age)?
-# return confidence level (low<0.5/high>0.5)?
-# basic image processing with openCV (too light/dark/blurred)?
+# azure credentials should be sent from
+# mobile app in the request headers
+
+# ?basic image processing with openCV (too light/dark/blurred)?
+
+load_dotenv()  # get Azure credentials
+user_api_key = os.getenv('COMPUTER_VISION_API_KEY')
+user_endpoint = os.getenv('COMPUTER_VISION_ENDPOINT')
 
 
 def detect(photo: bytes) -> str:
-    result = azure_vision(photo)
+    """function like this will be in Flutter app"""
+    result = azure_vision(photo, user_endpoint, user_api_key)
     return json.loads(result)['result']     # get text from JSON results
 
 
-def azure_vision(photo: bytes) -> str:
+def azure_vision(photo: bytes, endpoint: str, api_key: str) -> str:
     """detecting objects on the photo with Azure Computer Vision API"""
-    from dotenv import load_dotenv
     import requests
 
-    load_dotenv()   # get Azure credentials
-    api_key = os.getenv('COMPUTER_VISION_API_KEY')
-    endpoint = os.getenv('COMPUTER_VISION_ENDPOINT')
     try:
         request_url = endpoint + "vision/v3.1/analyze"
         headers = {'Ocp-Apim-Subscription-Key': api_key,
                    'Content-Type': 'application/octet-stream'}
-        params = {'visualFeatures': 'Description,Brands,Objects'}
+        params = {'visualFeatures': 'Description,Brands,Objects,Faces,Color'}
         response = requests.post(request_url, headers=headers, params=params, data=photo)
         response.raise_for_status()
         results = response.json()
@@ -41,5 +42,7 @@ def azure_vision(photo: bytes) -> str:
         return json.dumps({'result': 'I could not perform an image analysis.'})
 
 
-# to test the function uncomment the line below and change 'capture.png' to some image path OR run test_detector.py
-# print(detect(open('capture.png', 'rb').read()))
+# to test the function uncomment the code below and change image path OR run detector.py
+
+# if __name__ == '__main__':
+    # print(detect(open('capture.png', 'rb').read()))
