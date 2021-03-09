@@ -16,9 +16,9 @@ Takes an image as an input and returns objects (and brands, if any) detected in 
 
 - endpoint: TBA
 - request: `POST`
-- headers: `{'Content-Type': 'image/jpeg', 'image/png'}`
+- headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
-- response: type `text/plain`; charset `utf-8`
+- response: `text/plain; charset=UTF-8`
 ---
 #### Text extraction 
 Function `text-reader` makes use of [Azure Computer Vision API](https://westcentralus.dev.cognitive.microsoft.com/docs/services/computer-vision-v3-1-ga/operations/56f91f2e778daf14a499f20d), 
@@ -30,9 +30,9 @@ Takes an image (binary data) as an input and returns the short text (if any) det
 
 - endpoint: TBA
 - request: `POST`
-- headers: `{'Content-Type': 'image/jpeg', 'image/png'}`
+- headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
-- response: type `text/plain`; charset `utf-8`
+- response: `text/plain; charset=UTF-8`
 ---
 #### Face recognition 
 Function `face-recognizer` returns the names of the people familiar to the end user, whose photos were given to the model.
@@ -41,6 +41,6 @@ Function `face-recognizer` returns the names of the people familiar to the end u
 
 - endpoint: TBA
 - request: `POST`
-- headers: `{'Content-Type': 'image/jpeg', 'image/png'}`
+- headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
-- response: type `text/plain`; charset `utf-8`
+- response: `text/plain; charset=UTF-8`
