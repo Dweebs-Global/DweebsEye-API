@@ -39,4 +39,7 @@ jobs:
 
       - name: Test with Pytest
         shell: bash
-        run: pytest
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          pytest
+          popd
