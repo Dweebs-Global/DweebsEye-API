@@ -38,4 +38,5 @@ jobs:
           popd
 
       - name: Test with Pytest
+        shell: bash
         run: pytest
