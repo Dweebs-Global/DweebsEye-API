@@ -41,5 +41,5 @@ jobs:
         shell: bash
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          python -m pytest
+          python3 -m pytest
           popd
