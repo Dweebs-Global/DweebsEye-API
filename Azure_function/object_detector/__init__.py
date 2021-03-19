@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 import azure.functions as func
 import requests
@@ -14,8 +14,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     """    
     if req.method == 'POST':
         logging.info('Python HTTP trigger function processed a request.')
-        api_key = os.environ['CV_API_KEY1']
-        endpoint = os.environ['CV_ENDPOINT']
+        try:
+            api_key = os.environ['CV_API_KEY1']
+            endpoint = os.environ['CV_ENDPOINT']
+        except KeyError:
+            api_key = ''
+            endpoint = ''
 
         if req.headers.get('Content-Type') not in ['image/jpeg', 'image/png']:
             return func.HttpResponse('Not valid or not specified content type in the headers.', status_code=400)
