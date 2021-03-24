@@ -3,9 +3,12 @@
 
 Before going further, please take time to watch this short video on [best practices for collaboration on GitHub](https://www.coursera.org/lecture/introduction-git-github/best-practices-for-collaboration-6MVzC?utm_source=link&utm_medium=page_share&utm_content=vlp&utm_campaign=top_button)
 
+*Current Python version used is 3.8*
+
 **On your first contribution:**
 
 - [clone](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the repo: `git clone https://github.com/Dweebs-Global/DweebsEye-API`
+- make sure you have the current Python version installed and used for your virtual environment
 - create a virtual environment (.venv/) and activate it
 - in your virtual environment install the project requirements:
 `pip install -r requirements.txt`
