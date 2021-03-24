@@ -1,5 +1,7 @@
 # DweebsEye API
 
+***Before working on the code check [Contributing guidelines](https://github.com/Dweebs-Global/DweebsEye-API/blob/main/CONTRIBUTING.md)***
+
 
 Public REST API for DweebsEye app.
 
