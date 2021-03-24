@@ -1,5 +1,5 @@
 ## Contributing guidelines for DweebsEye API repository 
-###Here are steps to take to start working on the project code
+### Here are steps to take to start working on the project code
 
 Before going further, please take time to watch this short video on [best practices for collaboration on GitHub](https://www.coursera.org/lecture/introduction-git-github/best-practices-for-collaboration-6MVzC?utm_source=link&utm_medium=page_share&utm_content=vlp&utm_campaign=top_button)
 
