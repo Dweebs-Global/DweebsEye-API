@@ -48,8 +48,10 @@ following up:
 
 
 
-**Further reference:** 
+### Further reference:
+- [Getting started with Azure Functions in Python](https://www.scalyr.com/blog/azure-functions-in-python-a-simple-introduction/)
+- [official Microsoft guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python) for Azure functions in Python
 - [official GitHub documentation](https://docs.github.com/en)
 - great [course on Git and GitHub](https://www.coursera.org/learn/introduction-git-github)
-- [official Microsoft guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python) for Azure functions in Python
+
 
