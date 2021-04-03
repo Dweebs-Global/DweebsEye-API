@@ -26,13 +26,21 @@ setting up:
     - `git checkout <your-branch>`
     - `git merge main`
 - make sure to have **.github/workflows/main.yml** in the root folder on your new branch (to trigger GitHub Action which runs the workflow)
+- to work with Azure Functions make sure you have Visual Studio Code with [Azure Functions extension](https://docs.microsoft.com/en-us/azure/includes/media/functions-install-vs-code-extension/vscode-install-extension.png) and [Azure Functions Core Tools](https://github.com/Azure/azure-functions-core-tools) installed
 
 working:
-- commit changes with meaningful messages, try to have many small commits other than a huge one
-- add dependencies to requirements.txt (manually, no pip freeze) and install them with `pip install -r requirements.txt`
+- to add a new function to the existing project (Function app): after opening the project in VS Code, [click Azure icon](https://docs.microsoft.com/en-us/azure/includes/media/functions-install-vs-code-extension/azure-functions-window-vscode.png) on the Side Bar on the left, choose the corresponding Local Project and click the ["Create Function" button](https://docs.microsoft.com/en-us/azure/azure-functions/media/functions-develop-vs-code/create-function.png)
+- when creating Azure functions, add dependencies to requirements.txt (manually, no pip freeze) and install them with `pip install -r requirements.txt`
+- try to have many small commits with small changes other than huge ones with many changes
+- commit changes with meaningful messages (it helps you and the team in the future)
+  - standard message after `git commit -m ` should be up to 50 characters long
+  - if you have more information, use simple `git commit` command and add more detailed commit message with your editor as follows: 
+  - the first line is usually a short description of changes (<=50 char.) followed by a blank line
+  - then goes a detailed description of the changes (under 72 char. in each line)
+  - the length is crucial for displaying the messages properly in logs
 
 testing:
-- write unit tests in **tests/** folder, test file names starting with **test_** + **function name** + .py
+- write unit tests in **tests/** folder, test file names starting with **test_** + **function name** + .py ([check this](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-python#package-management))
 - create empty **__init__.py** in **tests/** for tests to run correctly
 - use [unittest](https://docs.python.org/3/library/unittest.html) or [pytest](https://docs.pytest.org/en/stable/) to run the tests (install with `pip install pytest`; run with `pytest` command)
 
