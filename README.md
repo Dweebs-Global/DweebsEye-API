@@ -36,8 +36,11 @@ Takes an image (binary data) as an input and returns the short text (if any) det
 - body: `binary data` (image)
 - response: `text/plain; charset=UTF-8`
 
-### Face recognition 
-Function `face_recognizer` returns the names of the people familiar to the end user, whose photos were given to the model.
+### Face detection 
+Function `face_detector` makes use of [Azure Face API](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236), 
+particularly *Detect* operation.
+
+Takes an image (binary data) as an input and returns features (age, gender, glasses, emotion) detected in the faces of people on the photo.
 
 **How to use:**
 

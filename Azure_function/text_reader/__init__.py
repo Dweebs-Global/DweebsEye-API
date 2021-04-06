@@ -7,7 +7,7 @@ import requests
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """
-    TextReader Function or dweebs-eye function app;
+    text_reader function of dweebs-eye function app;
     gets an image from the request body and
     makes an API call to Azure Computer Vision API,
     namely to OCR endpoint to get text from the image.
@@ -46,6 +46,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 result = 'The extracted text is: ' + result[0:150]
             else:
                 result = 'No readable text found.'
-            return func.HttpResponse(f'{result}')
+            return func.HttpResponse(result)
         except:
             return func.HttpResponse('Could not perform image analysis.', status_code=400)
