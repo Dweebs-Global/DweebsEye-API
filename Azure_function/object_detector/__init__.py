@@ -7,7 +7,7 @@ import requests
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     """
-    ObjectDetector Function or dweebs-eye function app;
+    object_detector function of dweebs-eye function app;
     gets an image from the request body and
     makes an API call to Azure Computer Vision API,
     namely to Analyze endpoint to get an image description.
@@ -38,10 +38,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             response.raise_for_status()
             results = response.json()
             description = results['description']['captions'][0]['text']
-            result = 'There is probably ' + description + ' in front of you.'
+            result = 'There is ' + description + ' in front of you.'
             if results['brands']:
                 brand = results['brands'][0]['name']
                 result += ' The brand is ' + brand
-            return func.HttpResponse(f'{result}')
+            return func.HttpResponse(result)
         except:
             return func.HttpResponse('Could not perform image analysis.', status_code=400)
