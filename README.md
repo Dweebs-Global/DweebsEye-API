@@ -16,7 +16,6 @@ Takes an image as an input and returns objects (and brands, if any) detected in 
 
 **How to use:**
 
-- endpoint: TBA
 - request: `POST`
 - headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
@@ -24,13 +23,12 @@ Takes an image as an input and returns objects (and brands, if any) detected in 
 
 ### Text extraction 
 Function `text_reader` makes use of [Azure Computer Vision API](https://westcentralus.dev.cognitive.microsoft.com/docs/services/computer-vision-v3-1-ga/operations/56f91f2e778daf14a499f20d), 
-particularly *Optical Character Recognition* operation.
+particularly of asynchronous Read operation. First, POST request is sent to Read endpoint, then GET request is sent to Get Read Result endpoint.
 
 Takes an image (binary data) as an input and returns the short text (if any) detected in the image.
 
 **How to use:**
 
-- endpoint: TBA
 - request: `POST`
 - headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
@@ -44,7 +42,6 @@ Takes an image (binary data) as an input and returns features (age, gender, glas
 
 **How to use:**
 
-- endpoint: TBA
 - request: `POST`
 - headers: `{'Content-Type: image/jpeg'}` or `{'Content-Type: image/png'}`
 - body: `binary data` (image)
